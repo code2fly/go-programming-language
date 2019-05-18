@@ -1,5 +1,3 @@
-# The GO programming language
-
 ## Introduction -  
    * ***[Origins of GO](#origins-of-go--)*** 
    * ***[The GO project](#the-go-project--)***

@@ -7,8 +7,7 @@
 
 Go influences from lot of languages like(C,pascal,CSP). image shows GO influence from its ancestors.
 
-![alt text](go_influence)
-[go_influence]: /resources/images/Go_origin.PNG "Go Influence tree"
+![alt](/resources/images/Go_origin.PNG)
 
 
 #### Features inherited from different languages - 

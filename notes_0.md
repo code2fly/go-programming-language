@@ -1,6 +1,8 @@
 # The GO programming language
 
 ## Introduction -  
+   * ***Origins of GO***
+   * ***The GO project***
 
 ### Origins of GO -
 ----------
@@ -31,3 +33,20 @@ Go influences from lot of languages like(C,pascal,CSP). image shows GO influence
 
 **PS -**  Also has new features like Slices (dynamic arrays with efficient random access but also sofisticated sharing arrangements like Linked Lists) and Defer.
 
+
+
+----------
+----------
+
+
+### The GO Project -
+----------
+
+* GO project was born out of frustration of software system suffering from explosion of complexity in google.
+
+* GO has advantage of hindisight and basics are done well (like garbage collection, package system, first class func, lexical scope, a system call interface, immutable string in which text is generally UTF-8).
+   **PS -** it also has comparitively less features to reduce complexity like , no implicit numeric conversion , no default parameter values, no inheritence, no generics, ***no exceptions*** , no function annotation , no thread local storage.
+
+* GO encourages awareness of computer system design ***particularly importance of locality*** , and its built-in types and most library DS are crafted to work without explicit initialization or implicit constructor(so no hidden memory allocation in code)
+
+* GO's lightweight thread or goroutine's variable-size stack intially is small enough that creating 1 is cheap and creating millions is practical.

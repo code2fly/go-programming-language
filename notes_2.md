@@ -8,6 +8,7 @@
    * ***[Integers](#integers--)*** 
    * ***[Floating Point Numbers](#floating-point-numbers--)*** 
    * ***[Complex Number](#complex-number--)*** 
+   * ***[String](#string--)*** 
 
 
 ### Names -
@@ -64,6 +65,7 @@
 ### Integers -
 ----------
 
+
 - numeric datatype has serveral variation of int, float and complex number which determines their ***sizes and signedness*** i.e GO has both signed and unsigned arithmetic.
 - for ints there are 4 variation of size i.e. int8, int16, int32 and int64. corresponding unsigned are uint8, uint16 etc.. ***but there are also just int and uint that natural and most efficient size for signed and unsigned in a particular platform***(size of these can vary based on compiler 32 or 64 bit even on identical hardware) 
 - **type rune** is a synonym of int32 and by convention it indicates value of a unicode codepoint. here 2 names can be used interchangably like byte is uint8 but the former emphasizes that it is a raw data rather than just a small number.
@@ -84,4 +86,46 @@
 - for every type T, conversion operator T(x) converts x to type T if conversion is allowed. ***e.g -  x int16 = 3 ; y int = int(x)***
 - integer number can be either written as normal number or octal starting with 0 or hexadecimal starting with 0x or 0X(small or capital case does not matter)
 - octal numbers nowadays are only used for ***file permission on POSIX system*** , but hexadecimal are used widely to emphasize the bit pattern of a number over its numerical value
-- when printing number with fmt package we can control radix and format using %d, %o and %x package
+- when printing number with fmt package we can control radix and format using %d, %o and %x package.
+
+
+
+
+### Floating point numbers -
+----------
+
+- they are of 2 sizes float32 and float64
+- their range can be found in 'math' package, math.MaxFloat32 and math.MaxFloat64
+- math package also provides utility like math.NaN (for things like infinity) and math.IsNaN() to check if a value is NaN (note NaN == NaN is false i.e NaN comparisons are not as expected)
+- **do the float func to implement geometry function ??**
+
+
+### Complex numbers -
+----------
+
+- there are 2 sizes of complex numbers complex64 and complex128 whose complements are float32 and float64
+- complex(1,2) create a complex type with 1 as real and 2 as imaginary part (1+2i)
+- build in real() and imag() are used to extract those real and imaginary parts of a complex number.
+- math/cmplx pakcage provides library function for complex numbers like complex square root and exponential function
+- **generate a mandelbrot fractel image**???
+
+
+### String -
+----------
+
+- it is immutable sequence of bytes.
+- text strings are conventionally interpreted as utf8 encoded sequence of unicode code points(runes).
+- len(string) gives number of bytes in string and not runes and s[i] retrieves ith byte i.e. s[1] will return int byte rather than char.
+- attempting to access string outside its range say s[len(s)] results in a ***panic***.
+- ith byte of a string is not necessarily the ith character of a string, because UTF-8 encoding on non-ASCII requires 2 or more bytes.
+- substring can be achieved using s[i:j]
+- 2 strings can be compared using == or > .the comparision happens byte by byte so result is natural lexiographical order.
+- there are 2 types of string literal representation.
+
+   1. ***Double quoted*** -   here escape sequences(like with \ ) can be used to insert arbitrary byte values into string. because GO's source file is interpreted as UTF-8 we can insert unicode code points in string literals.
+
+   2. ***Raw string literal*** - `...` using backquotes instead of double quotes.
+   here no escape sequence are processed (contents are taken literally including backslashes and new lines). the only processing is carriage returns are deleted so the strings are same on all platforms.
+   
+      - used for writing regular expression, which normally have lot of backslashes
+      - useful for HTML templates, json literals, command usage messages(which extends over lines)

@@ -114,6 +114,7 @@
 ----------
 
 - it is immutable sequence of bytes.
+   - immutability means it is safe for 2 copies of string to share same memory, also a substring s[7:] shares the same memory so substring operation is also cheap.
 - text strings are conventionally interpreted as utf8 encoded sequence of unicode code points(runes).
 - len(string) gives number of bytes in string and not runes and s[i] retrieves ith byte i.e. s[1] will return int byte rather than char.
 - attempting to access string outside its range say s[len(s)] results in a ***panic***.
@@ -124,8 +125,45 @@
 
    1. ***Double quoted*** -   here escape sequences(like with \ ) can be used to insert arbitrary byte values into string. because GO's source file is interpreted as UTF-8 we can insert unicode code points in string literals.
 
-   2. ***Raw string literal*** - `...` using backquotes instead of double quotes.
+   2. ***Raw string literal*** - `raw string literals` using backquotes instead of double quotes.
    here no escape sequence are processed (contents are taken literally including backslashes and new lines). the only processing is carriage returns are deleted so the strings are same on all platforms.
    
       - used for writing regular expression, which normally have lot of backslashes
       - useful for HTML templates, json literals, command usage messages(which extends over lines)
+
+- under unicode all characters in world's writing system, accents etc. are assigned one standard number called ***Unicode code point*** , in GO terminology its ***rune***.
+- utf-8 defines code point for over 120,000 chars for over 100 langs and scripts.
+- natural datatype to hold single rune is int32.
+- in utf-32 each code point has a same size of 32 bits and hence it is a wastage at times since mostly readable english text like ASCII requires 8 bits.
+- ***UTF-8 is a variable length***  encoding of Unicode code points in bytes(created by Ken Thompson and Rob Pike). it uses between 1 and 4 bytes to represent each rune. (high order bits of the first byte of encoding for rune indicate how many bytes to follow like high-order 0 indicates 7-bit ASCII here each rune only takes 1 byte, high-order 110 indicate rune takes 2 bytes.)
+![alt](/resources/images/utf8_encoding_table.PNG)
+
+- ***unicode*** package provide fn for working with indivisual runes (like distinguishing letters from numbers or lower case from upper case etc..)
+- ***unicode/utf8*** package provide fn for encoding(writing runes as byte to some byte[] etc.)/decoding(getting runes from a string and its size) runes as bytes using utf-8.
+- unicode escape in GO string allows us to specify them by their numeric code point value e.g. \uhhhh (16 bit value) and \Uhhhhhhhh(32 bit value)
+- ideally if we had to loop over string and get runes using "utf8.DecodeRuneAsString()" could be used but then we would have a clumsy for loop to skip index based on rune size, ***this can be handled better using GO's range loop***.
+```go
+    // normal but clumsy way
+    s := "Hello, 世界 , हर कोई!"
+	for len(s) > 0 {
+		r, size := utf8.DecodeRuneInString(s)
+		fmt.Printf("unicode char is : %[1]c, code point value is: %[1]v , size is %[2]d \n", r, size)
+		s = s[size:]
+    }
+    
+    // better way using range , when applied over string, performs UTF-8 decoding implicitly
+	for index, r := range s {
+		fmt.Printf("unicode char is : %[1]q, code point value is: %[1]v , currnet index is : %[3]d \n", r, index)
+	}
+
+```
+
+- []rune conversion when applied to string returns sequence of unicode code points that string encodes.
+- ***coverting a interger value to a string interprets the integer as a rune value and yields utf8 representation e.g. string(65) = "A" and not "65"*** , if rune is invalid e.g. string(1234567) a replacement character '\uFFFD' �(white questionmark inside black hexagon) is replaced.
+
+- useful packages when working and manipulating string are - 
+
+   - ****strings**** - utilities for comparing, joining , splitting, searching , trimming, replacing string etc..
+   - ****bytes**** - has similar funcs for manipulating slices of bytes , []byte. can be useful when building up string incrementally as normal process involves too much copying and allocation of memory due to string immutability in such cases bytes.Buffer could be used.
+   - ****strconv**** - provides func for converting boolean, int, float values to and from their string representations, and also func for quoting and unquoting strings.
+   - ****unicode**** - provides func like IsDigit, IsLetter, IsUpper etc for classifying runes.

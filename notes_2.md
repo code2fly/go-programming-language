@@ -136,7 +136,7 @@
 - natural datatype to hold single rune is int32.
 - in utf-32 each code point has a same size of 32 bits and hence it is a wastage at times since mostly readable english text like ASCII requires 8 bits.
 - ***UTF-8 is a variable length***  encoding of Unicode code points in bytes(created by Ken Thompson and Rob Pike). it uses between 1 and 4 bytes to represent each rune. (high order bits of the first byte of encoding for rune indicate how many bytes to follow like high-order 0 indicates 7-bit ASCII here each rune only takes 1 byte, high-order 110 indicate rune takes 2 bytes.)
-![alt](/resources/images/utf8_encoding_table.PNG)
+![alt](/resources/images/utf8encoding_table.PNG)
 
 - ***unicode*** package provide fn for working with indivisual runes (like distinguishing letters from numbers or lower case from upper case etc..)
 - ***unicode/utf8*** package provide fn for encoding(writing runes as byte to some byte[] etc.)/decoding(getting runes from a string and its size) runes as bytes using utf-8.
